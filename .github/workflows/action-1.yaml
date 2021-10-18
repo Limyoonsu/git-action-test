@@ -16,13 +16,15 @@ jobs:
     
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      env :
+        SUPER_SECRET : ${{ secrets.HOST }}
     # Runs ssh deploy for CI, CD
-    - name: executing remote ssh commands using password
+      # - name: executing remote ssh commands using password
       if: github.event_name == 'pull_request'
       run: |
-        echo ${{ secrets.HOST }}
-        echo ${{ secrets.USERNAME }}
-        echo ${{ secrets.KEY }}
+        echo "$SUPER_SECRET"
+        echo "USERNAME: ${{ secrets.USERNAME }}"
+        echo "KEY: ${{ secrets.KEY }}"
       #uses: appleboy/ssh-action@master
       #with:
       #  host: ${{ secrets.HOST }}
