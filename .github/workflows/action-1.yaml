@@ -1,22 +1,33 @@
-name: CI
-
+name: WEB
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
 on:
-  push:
-    branches: [main]
   pull_request:
-    branches: [main]
-
+    types: [closed] # when PR closed
+    branches: [ master ]
+ 
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  deploy:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    steps:
-      - name: Deploy
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.KEY }}
-          port: ${{ secrets.PORT }}
-          script: |
+    if: github.event.pull_request.merged
+    
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:    
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+    # Runs ssh deploy for CI, CD
+    - name: executing remote ssh commands using password
+      if: github.event_name == 'pull_request'
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        # password: ${{ secrets.PASSWORD }}
+        # port: ${{ secrets.PORT }} # default : 22
+        script: |
             cd /home/${{ secrets.USERNAME }}/git/git-action-test
             git pull https://${{ secrets.TOKEN }}@github.com/Limyoonsu/git-action-test.git
