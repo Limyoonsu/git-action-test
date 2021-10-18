@@ -1,8 +1,6 @@
 name: CI
 
 on:
-  push:
-    branches: [main]
   pull_request:
     branches: [main]
 
@@ -11,6 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy
+        if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+        
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
