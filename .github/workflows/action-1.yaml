@@ -4,7 +4,7 @@ name: WEB
 on:
   pull_request:
     types: [closed] # when PR closed
-    branches: [ master ]
+    branches: [ main ]
  
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -15,9 +15,7 @@ jobs:
     if: github.event.pull_request.merged
     
     # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:    
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - uses: actions/checkout@v2
+    steps:
     # Runs ssh deploy for CI, CD
     - name: executing remote ssh commands using password
       if: github.event_name == 'pull_request'
