@@ -19,4 +19,4 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd /home/${{ secrets.USERNAME }}/git/git-action-test
-            git pull https://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@github.com/Limyoonsu/git-action-test.git
+            git pull https://${{ secrets.TOKEN }}@github.com/Limyoonsu/git-action-test.git
