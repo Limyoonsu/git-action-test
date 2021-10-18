@@ -26,12 +26,4 @@ jobs:
     # Runs ssh deploy for CI, CD
     - name: executing remote ssh commands using password
       if: github.event_name == 'pull_request'
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.KEY }}
-        # port: ${{ secrets.PORT }} # default : 22
-        script: |
-          echo "$SUPER_SECRET"
-          echo "USERNAME: ${{ secrets.USERNAME }}"
+      run: echo "SUPER_SECRET= $SUPER_SECRET"
