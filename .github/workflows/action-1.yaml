@@ -1,29 +1,25 @@
-# This is a basic workflow to help you get started with Actions
-name: WEB
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the master branch
+name: Flask App deploy
+# 이벤트 바인딩 : main 브랜치에 push 이벤트 발생 시 실행
 on:
-  pull_request:
-    types: [closed] # when PR closed
-    branches: [ main ]
- 
- 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+  push:
+    branches: 
+    - main
+
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  deploy:
+    name: Flask App deploy from NCP server
     runs-on: ubuntu-latest
-    env:
-      SUPER_SECRET: ${{ secrets.HOST }}
-      
-    if: github.event.pull_request.merged
-    
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:    
+    steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
-    # Runs ssh deploy for CI, CD
     - name: executing remote ssh commands using password
-      if: github.event_name == 'pull_request'
-      run: echo "SUPER_SECRET= $SUPER_SECRET"
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        port: ${{ secrets.PORT }}
+        script: |
+          cd /usr/local
+          git clone  https://github.com/Limyoonsu/git-action-test.git
+
